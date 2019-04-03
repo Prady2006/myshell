@@ -15,19 +15,26 @@ void pwd(){
 }
 //Dont use createfile as name of function cause same as windows built-in function
 void fcreate(char my[]){
-    const char *arr;
+    char *arr;
+    const char *arr1;
     arr = strtok(my," ");
     int count = 1;
     while(count--){
         arr = strtok(NULL," ");
-    }
-    // LPCSTR Filename ;
+    }                                                           // all this to make char * to  const char * what a mess ...
+    // arr1 = (const char *)arr;
+    LPCSTR Filename ;
     // strcpy(Filename,arr);
-    // HANDLE filehandler ;
-    // filehandler = CreateFileA(arr,GENERIC_READ | GENERIC_WRITE,2,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
-    FILE *fptr;
-    fptr = fopen(arr,"w");
-    fclose(fptr);
+    Filename = (const char *)arr;
+    HANDLE filehandler ;
+    filehandler = CreateFileA(Filename,GENERIC_READ | GENERIC_WRITE,2,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
+    if(filehandler == INVALID_HANDLE_VALUE){
+        strcpy(buff,"cant create file .");
+        printf("cant create file\n");
+    }
+    // FILE *fptr;
+    // fptr = fopen(arr,"w");
+    // fclose(fptr);
 }
 void changedirectory(char *my){
     char arr[strlen(my)];
