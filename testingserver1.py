@@ -34,14 +34,18 @@ def recv(conn,s):
                 if len(data1) > 0  and data1.split()[0] == "dwl" and len(data1.split()) == 3:
                     count = 0
                     for byt in data:
-                        print(chr(byt),end = "")
-                        if byt != "\x00":
+                        # print(chr(byt),end = "")
+                        if chr(byt) != "\x00":
+                            # print(byt,end="")
                             fptr = open(data1.split()[2],"a+")
                             fptr.write(chr(byt))
-                            fptr.close()
                         else:
+                            # print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                            print("file copied \n")
+                            fptr.close()
                             count = 1
                             break
+                    # print(byt)
                 else:    
                     print(" "*30 + data.decode())
             except:
