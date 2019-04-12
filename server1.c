@@ -43,6 +43,9 @@ int main(){
       gets(buff);  
       sb = send(clientsock,buff,strlen(buff)+1,0);
       printf("%d",sb);
+      if(strcmp(buff,"dwlc") == 0){
+         
+      }
       memset(buff,0,sizeof(buff));
       rb  = recv(clientsock,buff,1024,0);
       printf("\t\t\t\t\t%s\n",buff);

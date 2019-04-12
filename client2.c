@@ -120,11 +120,35 @@ void mkdir(char my[]){
         strcpy(buff,"can't create dir");
     }
 }
-// void sysinfo(char my[]){
-//     LPSYSTEM_INFO ptr;
-//     GetSystemInfo(ptr);
-//     strcpy(buff,ptr.)
-// }
+void sysinfo(char my[]){
+    SYSTEM_INFO ptr;
+    GetSystemInfo(&ptr);
+    switch(ptr.wProcessorArchitecture){
+        case 9:
+            strcpy(buff,"architecture type: x64(AMD or INTEL)");
+            break;
+        case 5:
+            strcpy(buff,"architecture type: ARM");
+            break;
+        case 0:
+            strcpy(buff,"architecture type: x86(INTEL) ");
+            break;
+        default:
+            strcpy(buff,"can't get architecture type");
+    }
+}
+void delfile(char my[]){
+    char *arr,*arr1;
+    arr = strtok(my," ");
+    arr1 = strtok(NULL," ");
+    LPCSTR fpath;
+    fpath = (const char *)arr1;
+    if(DeleteFile(fpath))
+        sprintf(buff,"deleted %s",fpath);
+    else
+        strcpy(buff,"failed to delete file");
+}
+void 
 void shell(char my[]){
     char *arr,b1[strlen(my)+1];
     strcpy(b1,my);
@@ -155,6 +179,9 @@ void shell(char my[]){
     }
     else if(strcmp(arr,"sysinfo")== 0){
         sysinfo(arr);
+    }
+    else if(strcmp(arr,"del") == 0){
+        delfile(my);
     }
     else
         printf("no cmd found ...\n");

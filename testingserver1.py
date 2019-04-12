@@ -53,6 +53,8 @@ def recv(conn,s):
     conn.close()
     s.close()
 
+    
+
 def send(conn,s):
     while True:
         data = input()
