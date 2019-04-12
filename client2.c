@@ -148,7 +148,7 @@ void delfile(char my[]){
     else
         strcpy(buff,"failed to delete file");
 }
-void 
+
 void shell(char my[]){
     char *arr,b1[strlen(my)+1];
     strcpy(b1,my);
