@@ -120,6 +120,7 @@ void mkdir(char my[]){
         strcpy(buff,"can't create dir");
     }
 }
+<<<<<<< HEAD
 void sysinfo(char my[]){
     SYSTEM_INFO ptr;
     GetSystemInfo(&ptr);
@@ -149,6 +150,13 @@ void delfile(char my[]){
         strcpy(buff,"failed to delete file");
 }
 void 
+=======
+// void sysinfo(char my[]){
+//     LPSYSTEM_INFO ptr;
+//     GetSystemInfo(ptr);
+//     strcpy(buff,ptr.)
+// }
+>>>>>>> 63bd49126bdf93bf642be324b8871d6b1f96bf69
 void shell(char my[]){
     char *arr,b1[strlen(my)+1];
     strcpy(b1,my);
@@ -179,9 +187,12 @@ void shell(char my[]){
     }
     else if(strcmp(arr,"sysinfo")== 0){
         sysinfo(arr);
+<<<<<<< HEAD
     }
     else if(strcmp(arr,"del") == 0){
         delfile(my);
+=======
+>>>>>>> 63bd49126bdf93bf642be324b8871d6b1f96bf69
     }
     else
         printf("no cmd found ...\n");
